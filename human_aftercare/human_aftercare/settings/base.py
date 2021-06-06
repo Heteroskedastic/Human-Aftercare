@@ -36,7 +36,6 @@ SHARED_APPS = (
     'django_filters',
     'rest_framework',
     'apps.facilities',  # you must list the app where your tenant model resides in
-
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
