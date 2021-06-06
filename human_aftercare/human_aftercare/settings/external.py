@@ -16,7 +16,7 @@ def load_module_from_source(path, name=""):
 
 
 DJANGO_EXTERNAL_CONFIG_PATH = os.getenv('DJANGO_EXTERNAL_CONFIG_PATH', '') or EXTERNAL_CONFIG_PATH
-DJANGO_EXTERNAL_CONFIG_PATH = DJANGO_EXTERNAL_CONFIG_PATH.replace('{BASE_DIR}', BASE_DIR)
+DJANGO_EXTERNAL_CONFIG_PATH = DJANGO_EXTERNAL_CONFIG_PATH.replace('{BASE_DIR}', str(BASE_DIR))
 _external_config = load_module_from_source(DJANGO_EXTERNAL_CONFIG_PATH, '')
 self_module = sys.modules[__name__]
 for k in dir(_external_config):
