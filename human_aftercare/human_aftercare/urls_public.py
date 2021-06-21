@@ -19,11 +19,14 @@ from django.urls import path, re_path, include
 from django.views.static import serve
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
 
+from apps.facilities.views import UiPanelView
+
 VERSION_PARAM = settings.REST_FRAMEWORK.get('VERSION_PARAM', 'version')
 DEFAULT_VERSION = settings.REST_FRAMEWORK.get('DEFAULT_VERSION', 'v1')
 API_ENDPOINT = 'api/(?P<{}>v\d+)'.format(VERSION_PARAM)
 
 urlpatterns = [
+    path('', include('apps.facilities.urls', namespace='facilities')),
     re_path('^{}/'.format(API_ENDPOINT),
             include('apps.facilities.rest_api.urls', namespace='facilities_rest_api')),
     path('admin/', admin.site.urls),
@@ -31,6 +34,7 @@ urlpatterns = [
     re_path(r'^token/auth/', obtain_jwt_token),
     re_path(r'^token/refresh/', refresh_jwt_token),
     re_path(r'^token/verify/', verify_jwt_token),
+    re_path(r'^ui-panel(?:(?P<hash>\S+))?$', UiPanelView.as_view(), name='ui-panel'),
 ]
 
 if settings.DEBUG:

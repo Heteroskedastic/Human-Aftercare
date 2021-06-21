@@ -1,0 +1,9 @@
+.toasted-container .toasted p {
+  margin-top: inherit;
+}
+
+.tab-content .tab-pane .card-footer {
+  margin-left: -29px;
+  margin-right: -29px;
+  padding-bottom: 0;
+}

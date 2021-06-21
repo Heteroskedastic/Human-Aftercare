@@ -12,6 +12,8 @@ from ..models import Resident
 
 
 class SessionView(viewsets.ViewSet):
+    getterSerializer = UserSessionSerializer
+
     class SessionPermission(permissions.BasePermission):
         """ custom class to check permissions for sessions """
 
@@ -26,7 +28,7 @@ class SessionView(viewsets.ViewSet):
 
     def get(self, request, *args, **kwargs):
         """ api to get current session """
-        return Response(UserSessionSerializer(request.user, context={'request': request}).data)
+        return Response(self.getterSerializer(request.user, context={'request': request}).data)
 
     def post(self, request, *args, **kwargs):
         """ api to login """
@@ -39,7 +41,7 @@ class SessionView(viewsets.ViewSet):
             return Response({'detail': 'User is inactive'}, status=status.HTTP_403_FORBIDDEN)
 
         login(request, user)
-        return Response(UserSessionSerializer(user, context={'request': request}).data)
+        return Response(self.getterSerializer(user, context={'request': request}).data)
 
     def delete(self, request, *args, **kwargs):
         """ api to logout """

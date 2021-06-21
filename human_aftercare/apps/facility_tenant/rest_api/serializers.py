@@ -8,6 +8,7 @@ from django.core import exceptions as django_exceptions
 from apps.facilities.models import User
 from ..models import Resident, UserProfile
 from human_aftercare.helpers.utils import DynamicFieldsSerializerMixin, Base64ImageField
+from ...facilities.rest_api.serializers import FacilitySerializer
 
 serializers.ModelSerializer.serializer_field_mapping[jsonfield.JSONField] = serializers.JSONField
 
@@ -71,6 +72,13 @@ class NestedProfileSerializer(serializers.ModelSerializer):
 class UserSessionSerializer(DynamicFieldsSerializerMixin, serializers.ModelSerializer):
     user_permissions = PermissionSerializer(read_only=True, many=True)
     groups = NestedGroupSerializer(read_only=True, many=True)
+    facility = serializers.SerializerMethodField()
+    profile = NestedProfileSerializer()
+
+    def get_facility(self, obj):
+        request = self.context.get('request')
+        if request:
+            return FacilitySerializer(request.tenant, context={'request': request}).data
 
     class Meta:
         model = User
@@ -96,7 +104,7 @@ class UserProfileSerializer(DynamicFieldsSerializerMixin, serializers.ModelSeria
             setattr(profile_object, k, v)
         profile_object.save()
 
-        return instance
+        return super().update(instance, validated_data)
 
 
 class ResidentSerializer(DynamicFieldsSerializerMixin, serializers.ModelSerializer):

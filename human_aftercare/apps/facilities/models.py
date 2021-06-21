@@ -30,7 +30,9 @@ class Facility(TenantMixin):
 
 
 class FacilityDomain(DomainMixin):
-    pass
+
+    def __str__(self):
+        return self.domain
 
 
 @receiver(post_schema_sync, sender=TenantMixin)
