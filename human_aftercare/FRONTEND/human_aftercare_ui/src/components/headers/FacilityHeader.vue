@@ -8,7 +8,7 @@
     <!--begin::Header Mobile-->
     <div id="kt_header_mobile" class="header-mobile align-items-center header-mobile-fixed">
       <!--begin::Logo-->
-      <a href="javascript:">
+      <a is="router-link" :to="{name: $rns.SITE_FACILITY_LIST}">
         <img alt="Logo" :src="`${$publicPath}resources/images/logo-light.png`" />
       </a>
       <!--end::Logo-->
@@ -52,6 +52,18 @@
         <div id="kt_header_menu" class="header-menu header-menu-mobile header-menu-layout-default">
           <!--begin::Header Nav-->
           <ul class="menu-nav">
+            <li class="menu-item menu-item-submenu">
+              <div class="symbol symbol-light-primary mr-3">
+                <span class="symbol-label">
+                  <img v-if="($store.getters.currentFacility || {}).logo" :src="($store.getters.currentFacility || {}).logo" alt="Logo" class="facility-logo">
+                  <span v-else class="fas fa-hospital-user fa-2x"></span>
+                </span>
+              </div>
+              <div class="d-flex flex-column font-weight-bold">
+                <span class="text-dark font-size-lg">{{ ($store.getters.currentFacility || {}).name }}</span>
+<!--                <span class="text-muted">{{($store.getters.currentFacility || {}).description}}</span>-->
+              </div>
+            </li>
           </ul>
           <!--end::Header Nav-->
         </div>

@@ -7,10 +7,10 @@ from django.dispatch import receiver
 from django_tenants.utils import get_tenant_database_alias, get_public_schema_name
 from phonenumber_field.modelfields import PhoneNumberField
 
-
 User = get_user_model()
 
-def avatar_file_path_func(instance, filename):
+
+def user_profile_avatar_file_path_func(instance, filename):
     from human_aftercare.helpers.utils import get_random_upload_path
     return get_random_upload_path(os.path.join('uploads', 'profile_avatar'), filename)
 
@@ -28,7 +28,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, primary_key=True, related_name='profile', on_delete=models.CASCADE)
     birth_date = models.DateField('Date of birth', blank=True, null=True)
     gender = models.CharField('Gender', max_length=1, choices=GENDER_CHOICES, default=GENDER_UNKNOWN)
-    avatar = models.ImageField('Avatar', blank=True, null=True, upload_to=avatar_file_path_func)
+    avatar = models.ImageField('Avatar', blank=True, null=True, upload_to=user_profile_avatar_file_path_func)
 
     def __str__(self):
         return '{}'.format(self.user)

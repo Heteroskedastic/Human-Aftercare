@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, primary_key=True, related_name='profile', serialize=False, to='auth.user')),
                 ('birth_date', models.DateField(blank=True, null=True, verbose_name='Date of birth')),
                 ('gender', models.CharField(choices=[('o', 'Other'), ('m', 'Male'), ('f', 'Female')], default='o', max_length=1, verbose_name='Gender')),
-                ('avatar', models.ImageField(blank=True, null=True, upload_to=apps.facility_tenant.models.avatar_file_path_func, verbose_name='Avatar')),
+                ('avatar', models.ImageField(blank=True, null=True, upload_to=apps.facility_tenant.models.user_profile_avatar_file_path_func, verbose_name='Avatar')),
             ],
         ),
     ]

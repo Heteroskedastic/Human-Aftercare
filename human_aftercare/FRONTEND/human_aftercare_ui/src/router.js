@@ -142,7 +142,7 @@ const router = new VueRouter({
 });
 
 router.afterEach(function (toRoute) {
-  let title = "CH-Database :: ",
+  let title = "Human-Aftercare :: ",
       pageInfo = toRoute.meta.pageInfo || {};
   if (pageInfo.title) {
     title = title + pageInfo.title + " :: ";

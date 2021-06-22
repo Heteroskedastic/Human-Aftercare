@@ -1,3 +1,5 @@
+import os
+
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.dispatch import receiver
@@ -9,6 +11,12 @@ from phonenumber_field.modelfields import PhoneNumberField
 User = get_user_model()
 
 
+def facility_logo_file_path_func(instance, filename):
+    from human_aftercare.helpers.utils import get_random_upload_path
+    return get_random_upload_path(os.path.join('uploads', 'profile_avatar'), filename)
+
+
+
 class Facility(TenantMixin):
     name = models.CharField(max_length=100)
     description = models.TextField(max_length=200)
@@ -18,6 +26,7 @@ class Facility(TenantMixin):
     primary_contact_name = models.CharField(max_length=100, null=True, blank=True)
     primary_contact_phone = PhoneNumberField(null=True, blank=True)
     primary_contact_email = models.EmailField(null=True, blank=True)
+    logo = models.ImageField(blank=True, null=True, upload_to=facility_logo_file_path_func)
     create_datetime = models.DateTimeField(auto_now_add=True)
     update_datetime = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)

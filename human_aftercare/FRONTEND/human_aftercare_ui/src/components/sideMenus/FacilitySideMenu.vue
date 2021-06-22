@@ -11,7 +11,7 @@
     <!--begin::Brand-->
     <div class="brand flex-column-auto" id="kt_brand">
       <!--begin::Logo-->
-      <a href="javascript:" class="brand-logo">
+      <a is="router-link" :to="{name: $rns.SITE_FACILITY_LIST}" class="brand-logo">
         <img alt="Logo" :src="`${$publicPath}resources/images/logo-light.png`"/>
       </a>
       <!--end::Logo-->

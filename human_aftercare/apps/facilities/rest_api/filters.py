@@ -7,5 +7,5 @@ class FacilityFilter(filters.FilterSet):
 
     class Meta:
         model = Facility
-        exclude = ['primary_contact_name', 'primary_contact_phone', 'primary_contact_email',]
+        exclude = ['primary_contact_name', 'primary_contact_phone', 'primary_contact_email', 'logo']
 
