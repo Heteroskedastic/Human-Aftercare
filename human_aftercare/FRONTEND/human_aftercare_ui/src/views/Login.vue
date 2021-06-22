@@ -93,7 +93,7 @@
         <!--begin::Aside Top-->
         <div class="d-flex flex-column-auto flex-column pt-lg-40 pt-15">
           <!--begin::Aside header-->
-          <a href="#" class="text-center mb-10">
+          <a is="router-link" :to="{name: $rns.SITE_FACILITY_LIST}" class="text-center mb-10">
             <img :src="`${$publicPath}resources/images/logo-letter-1.png`" class="max-h-70px" alt=""/>
           </a>
           <!--end::Aside header-->

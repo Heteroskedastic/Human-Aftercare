@@ -141,6 +141,11 @@ class RequestTimeLoggingMiddleware(object):
 
 class TenantSubfolderMiddleware(BaseTenantSubfolderMiddleware):
 
+    def process_request(self, request):
+        res = super().process_request(request)
+        settings.SESSION_COOKIE_NAME = '{}sessionid'.format(request.tenant.domain_subfolder or '')
+        return res
+
     @staticmethod
     def setup_url_routing(request, force_public=False):
         """

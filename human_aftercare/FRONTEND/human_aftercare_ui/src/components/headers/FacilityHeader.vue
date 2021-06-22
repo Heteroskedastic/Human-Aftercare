@@ -53,15 +53,14 @@
           <!--begin::Header Nav-->
           <ul class="menu-nav">
             <li class="menu-item menu-item-submenu">
-              <div class="symbol symbol-light-primary mr-3">
+              <div class="symbol symbol-light-primary mr-1">
                 <span class="symbol-label">
                   <img v-if="($store.getters.currentFacility || {}).logo" :src="($store.getters.currentFacility || {}).logo" alt="Logo" class="facility-logo">
                   <span v-else class="fas fa-hospital-user fa-2x"></span>
                 </span>
               </div>
               <div class="d-flex flex-column font-weight-bold">
-                <span class="text-dark font-size-lg">{{ ($store.getters.currentFacility || {}).name }}</span>
-<!--                <span class="text-muted">{{($store.getters.currentFacility || {}).description}}</span>-->
+                <span class="badge badge-light font-size-h2 text-dark-75 p-4">{{ ($store.getters.currentFacility || {}).name }}</span>
               </div>
             </li>
           </ul>
