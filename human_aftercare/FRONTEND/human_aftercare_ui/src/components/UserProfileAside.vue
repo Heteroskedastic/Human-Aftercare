@@ -65,6 +65,22 @@
         </a>
         <!--end:Item-->
         <!--begin::Item-->
+        <a v-if="$can('view', 'facility')" is="router-link" :to="{name: $rns.FACILITY_SETTING}" class="navi-item" @click.native="closeOffcanvas">
+          <div class="navi-link">
+            <div class="symbol symbol-40 bg-light mr-3">
+              <div class="symbol-label">
+                <span class="fas fa-hospital-alt text-danger">
+                </span>
+              </div>
+            </div>
+            <div class="navi-text">
+              <div class="font-weight-bold">Facility Setting</div>
+              <div class="text-muted">Facility setting and configurations</div>
+            </div>
+          </div>
+        </a>
+        <!--end:Item-->
+        <!--begin::Item-->
         <a class="navi-item">
           <div class="navi-link disabled">
             <div class="symbol symbol-40 bg-light mr-3">

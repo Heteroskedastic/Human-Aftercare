@@ -12,6 +12,7 @@ import FacilityLayout from "@/components/layouts/FacilityLayout";
 import SiteLayout from "@/components/layouts/SiteLayout";
 import ResidentList from "@/views/ResidentList";
 import UserProfile from "@/views/UserProfile";
+import FacilitySetting from "@/views/FacilitySetting";
 
 Vue.use(VueRouter);
 
@@ -21,6 +22,7 @@ export const routeNames = {
   ROOT: "root",
   LOGIN: "login",
   USER_PROFILE: "user_profile",
+  FACILITY_SETTING: "facility_setting",
   DASHBOARD: "dashboard",
   RESIDENT_LIST: "resident_list",
 };
@@ -107,6 +109,16 @@ const router = new VueRouter({
             }
           },
           component: UserProfile
+        },
+        {
+          path: "facility-setting",
+          name: routeNames.FACILITY_SETTING,
+          meta: {
+            pageInfo: {
+              title: "Facility Setting"
+            }
+          },
+          component: FacilitySetting
         },
         {
           path: "dashboard",

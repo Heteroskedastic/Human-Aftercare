@@ -1,13 +1,16 @@
 import jsonfield
+from django.conf import settings
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.password_validation import validate_password
 from django.db import transaction
 from rest_framework import serializers
 from django.contrib.auth.models import Group, Permission
 from django.core import exceptions as django_exceptions
+from rest_framework.exceptions import PermissionDenied
 
-from apps.facilities.models import User
+from apps.facilities.models import User, Facility
 from ..models import Resident, UserProfile
-from human_aftercare.helpers.utils import DynamicFieldsSerializerMixin, Base64ImageField
+from human_aftercare.helpers.utils import DynamicFieldsSerializerMixin, Base64ImageField, ex_reverse
 from ...facilities.rest_api.serializers import FacilitySerializer
 
 serializers.ModelSerializer.serializer_field_mapping[jsonfield.JSONField] = serializers.JSONField
@@ -20,9 +23,12 @@ class SessionSerializer(serializers.Serializer):
 
 
 class PermissionSerializer(DynamicFieldsSerializerMixin, serializers.ModelSerializer):
+    app_label = serializers.CharField(read_only=True, source="content_type.app_label")
+
     class Meta:
         model = Permission
-        fields = ('id', 'name', 'codename')
+        fields = ('id', 'name', 'codename', "app_label")
+
 
 
 class SetPasswordSerializer(serializers.Serializer):
@@ -105,6 +111,63 @@ class UserProfileSerializer(DynamicFieldsSerializerMixin, serializers.ModelSeria
         profile_object.save()
 
         return super().update(instance, validated_data)
+
+
+class FacilitySerializer(DynamicFieldsSerializerMixin, serializers.ModelSerializer):
+    url = serializers.SerializerMethodField()
+    domain = serializers.SerializerMethodField()
+    logo = Base64ImageField(required=False, allow_null=True)
+
+    def get_url(self, obj):
+        request = self.context.get('request')
+        domain = self.get_domain(obj)
+        return ex_reverse(f'/{settings.TENANT_SUBFOLDER_PREFIX}/{domain}/', request=request, scheme='auto')
+
+    def get_domain(self, obj):
+        domain = getattr(obj, 'domain_subfolder', None)
+        if not domain:
+            domain = obj.domains.filter(is_primary=True).first()
+        return domain and str(domain)
+
+    class Meta:
+        model = Facility
+        read_only_fields = ['schema_name', 'is_active']
+        fields = '__all__'
+
+
+class UserSerializer(DynamicFieldsSerializerMixin, serializers.ModelSerializer):
+    profile = NestedProfileSerializer(read_only=True)
+    _groups = NestedGroupSerializer(read_only=True, source='groups', many=True)
+    _user_permissions = PermissionSerializer(read_only=True, source='user_permissions', many=True)
+
+    class Meta:
+        model = User
+        fields = ('id', 'last_login', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'is_superuser',
+                  'is_active', 'date_joined', 'groups', 'user_permissions', 'profile', '_groups', '_user_permissions')
+        read_only_fields = ('last_login', 'date_joined')
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    password = serializers.CharField(style={'input_type': 'password'})
+
+
+class GroupSerializer(DynamicFieldsSerializerMixin, serializers.ModelSerializer):
+    _permissions = PermissionSerializer(read_only=True, source='permissions', many=True)
+    permissions_count = serializers.SerializerMethodField(read_only=True)
+    UIROLE_PREFIX = 'uirole:'
+
+    class Meta:
+        model = Group
+        fields = ('id', 'name', 'permissions', '_permissions', 'permissions_count')
+
+    def get_permissions_count(self, obj):
+        return obj.permissions.count()
+
+    def validate_name(self, value):
+        if not self.instance and value.lower().startswith(self.UIROLE_PREFIX):
+            raise PermissionDenied('cannot add a group name starting with "UIrole:"')
+
+        return value
 
 
 class ResidentSerializer(DynamicFieldsSerializerMixin, serializers.ModelSerializer):

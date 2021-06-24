@@ -1,14 +1,18 @@
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import Group, Permission
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.parsers import FileUploadParser
 from rest_framework.response import Response
 
-from .filters import ResidentFilter
+from human_aftercare.helpers.utils import ExplicitPermissions
+from .filters import ResidentFilter, UserFilter, GroupFilter, PermissionFilter
 from .serializers import SessionSerializer, UserSessionSerializer, UserProfileSerializer, \
-    SetPasswordSerializer, ResidentSerializer
-from ..models import Resident
+    SetPasswordSerializer, ResidentSerializer, FacilitySerializer, UserSerializer, GroupSerializer, \
+    PermissionSerializer, ChangePasswordSerializer
+from ..models import Resident, User
 
 
 class SessionView(viewsets.ViewSet):
@@ -78,6 +82,81 @@ class ProfileView(viewsets.ViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     create = put
+
+
+class FacilityView(viewsets.ViewSet):
+    permission_classes = (permissions.IsAuthenticated, ExplicitPermissions)
+    serializer_class = FacilitySerializer
+    parser_classes = list(viewsets.ViewSet.parser_classes) + [FileUploadParser]
+    explicit_permissions = {
+        'list': ['facilities.view_facility'],
+        'put': ['facilities.change_facility'],
+        'create': ['facilities.change_facility'],
+    }
+
+    def list(self, request, *args, **kwargs):
+        return Response(self.serializer_class(request.tenant, context={'request': request}).data)
+
+    def put(self, request, *args, **kwargs):
+        serializer = self.serializer_class(instance=request.tenant, data=request.data, partial=True,
+                                           context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    create = put
+
+
+class UserView(viewsets.ModelViewSet):
+    max_page_size = 0
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    filterset_class = UserFilter
+    ordering = 'id'
+    ordering_fields = ('id', 'last_login', 'is_superuser', 'username', 'first_name', 'last_name', 'email', 'is_staff',
+                       'is_active', 'date_joined')
+    search_fields = ['username', 'first_name', 'last_name', 'email']
+
+    @action(detail=True, methods=['put'], serializer_class=ChangePasswordSerializer)
+    def set_password(self, request, *args, **kwargs):
+        user = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user.set_password(serializer.data['password'])
+        user.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class GroupView(viewsets.ModelViewSet):
+    max_page_size = 0
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+    filterset_class = GroupFilter
+    ordering = 'id'
+    ordering_fields = ('id', 'name')
+    search_fields = ['name']
+
+    def __check_ui_role_for_update(self):
+        instance = self.get_object()
+        if instance.name.lower().startswith(GroupSerializer.UIROLE_PREFIX):
+            raise PermissionDenied('cannot modify or delete a "UIrole" group')
+
+    def update(self, request, *args, **kwargs):
+        self.__check_ui_role_for_update()
+        return super(GroupView, self).update(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        self.__check_ui_role_for_update()
+        return super(GroupView, self).destroy(request, *args, **kwargs)
+
+
+class PermissionView(viewsets.ReadOnlyModelViewSet):
+    max_page_size = 0
+    queryset = Permission.objects.all()
+    serializer_class = PermissionSerializer
+    filterset_class = PermissionFilter
+    ordering = 'id'
+    ordering_fields = ('id', 'name', 'codename')
 
 
 class ResidentView(viewsets.ModelViewSet):

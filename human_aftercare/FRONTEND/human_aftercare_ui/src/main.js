@@ -12,6 +12,8 @@ import EventBus from "./EventBus";
 import * as Constants from "./Constants";
 
 import { version as AppVersion } from "../package.json";
+import {permAbility, definePermAbilitiesFor} from "./ability";
+import abilityPluginPerm from "./abilityPluginPerm";
 
 require("../public/metronic/assets/plugins/global/plugins.bundle.css");
 require("../public/metronic/assets/css/style.bundle.css");
@@ -20,6 +22,8 @@ require("../public/metronic/assets/css/themes/layout/header/menu/light.css");
 require("../public/metronic/assets/css/themes/layout/brand/dark.css");
 require("../public/metronic/assets/css/themes/layout/aside/dark.css");
 require("../public/resources/css/custom.css");
+
+Vue.use(abilityPluginPerm, permAbility);
 
 Vue.use(BootstrapVue);
 Vue.use(Toasted, {
@@ -50,6 +54,15 @@ new Vue({
   methods: {
   },
   created: function() {
+    this.$store.watch(
+      (state) => {
+        return state.currentUser;
+      },
+      (newUser) => {
+        definePermAbilitiesFor(newUser);
+      }
+    );
+
   },
   mounted: function() {}
 });

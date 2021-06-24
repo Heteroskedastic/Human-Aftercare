@@ -515,7 +515,7 @@ class ExplicitPermissions(BasePermission):
         http_method = request.method.lower()
         action = view.action
         if isinstance(perms, dict):
-            perms = perms.get(action, []) or []
+            perms = perms.get(action or http_method, []) or []
         if isinstance(perms, dict):
             perms = perms.get(http_method, []) or []
         if isinstance(perms, str):

@@ -4,6 +4,7 @@
   }
   .image-input-wrapper {
     background-position: 50%;
+    background-color: #e1f0ff;
   }
 </style>
 
@@ -47,8 +48,7 @@
                   <div class="form-group row">
                     <label class="col-xl-3 col-lg-3 col-form-label">Avatar</label>
                     <div class="col-lg-9 col-xl-6">
-                      <div class="image-input image-input-outline" id="kt_profile_avatar"
-                           :style="`background-image: url(${$publicPath}resources/images/blank-avatar.png)`">
+                      <div class="image-input image-input-outline" id="kt_profile_avatar">
                         <div class="image-input-wrapper"
                              :style="`background-image: url(${avatarChosenFileData || userProfile.profile.avatar || ($publicPath + 'resources/images/blank-avatar.png')})`"></div>
                         <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
@@ -187,12 +187,10 @@
 </template>
 
 <script>
-import $ from "jquery";
 import moment from "moment";
 import UtilMixin from "@/components/mixins/UtilMixin";
 import LoadingOverlayableMixin from "@/components/mixins/LoadingOverlayableMixin";
 import PageBar from "@/components/PageBar";
-import InlineConfirm from "@/components/libs/InlineConfirm";
 import VueDatetimepicker from "@/components/libs/VueDatetimepicker";
 
 
@@ -206,8 +204,6 @@ export default {
           this.$rns.ROOT,
       avatarChosenFile: null,
       avatarChosenFileData: null,
-      uploadingAvatar: false,
-      deletingAvatar: false,
       savingPersonalInfo: false,
       changingPassword: false,
       userPassword: {
