@@ -1,5 +1,8 @@
 <style scoped>
-
+.avatar-box {
+  border: 1px solid #ecf0f5;
+  color: lightgray !important;
+}
 </style>
 
 <template>
@@ -19,7 +22,7 @@
       <div class="d-flex align-items-center mt-5">
         <div class="symbol symbol-100 mr-5">
           <div v-if="$store.state.currentUser.profile.avatar" class="symbol-label" :style="`background-image: url(${$store.state.currentUser.profile.avatar})`"></div>
-          <div v-else class="symbol-label" :style="`background-image: url(${$publicPath}resources/images/blank-avatar.png)`"></div>
+          <div v-else class="symbol-label far fa-user fa-6x avatar-box"></div>
           <i class="symbol-badge bg-success"></i>
         </div>
         <div class="d-flex flex-column">

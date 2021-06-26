@@ -4,7 +4,16 @@
   }
   .image-input-wrapper {
     background-position: 50%;
-    background-color: #e1f0ff;
+    background-color: #f1f8ff;
+  }
+  .image-input-wrapper.blank-logo i {
+    color: #b6c9dc;
+    font-size: 6rem;
+  }
+  .image-input-wrapper.blank-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 </style>
 
@@ -41,8 +50,11 @@
                     <label class="col-xl-3 col-lg-3 col-form-label">Logo</label>
                     <div class="col-lg-9 col-xl-6">
                       <div class="image-input image-input-outline" id="kt_profile_avatar">
-                        <div class="image-input-wrapper"
-                             :style="`background-image: url(${logoChosenFileData || facility.logo || ($publicPath + 'resources/images/blank-logo.png')})`"></div>
+                        <div v-if="!logoChosenFileData && !facility.logo" class="image-input-wrapper blank-logo">
+                          <i class="far fa-image"></i>
+                        </div>
+                        <div v-else class="image-input-wrapper"
+                             :style="`background-image: url(${logoChosenFileData || facility.logo})`"></div>
                         <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
                                data-action="change" data-toggle="tooltip" title="" data-original-title="Change logo">
                           <i class="fa fa-pen icon-sm text-muted"></i>
