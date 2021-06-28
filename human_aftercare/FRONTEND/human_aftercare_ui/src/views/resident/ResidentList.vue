@@ -34,14 +34,19 @@
                 <span class="d-block text-muted pt-2 font-size-sm">resident list and management</span></h3>
             </div>
             <div class="card-toolbar">
-              <a is="router-link" :to="{name: $rns.RESIDENT_ADD}" class="btn btn-success font-weight-bolder">
+              <a is="router-link" :to="{name: $rns.RESIDENT_ADD}"
+                 class="btn btn-light-success font-weight-bolder" :class="{disabled: $cannot('add', 'resident')}">
                 <span class="fas fa-plus"></span> New Resident
               </a>
             </div>
           </div>
           <div class="card-body">
             <b-table :items="residents" :fields="bTableFields" :sort-by.sync="bTableSortBy" no-local-sorting responsive
+                     show-empty
                      class="resident-list-table" :sort-desc.sync="bTableSortDesc">
+              <template #empty="scope">
+                <h6 class="text-muted text-center pt-10">{{ scope.emptyText }}</h6>
+              </template>
               <template #cell(name)="data">
                 <div class="d-flex align-items-center">
                   <div class="symbol symbol-40 symbol-light-primary flex-shrink-0">
@@ -72,14 +77,17 @@
                 <span class="font-weight-bold text-dark-50">{{formatDate(data.item.birth_date, 'MMM D, YYYY')}}</span>
               </template>
               <template #cell(actions)="data">
-                <a is="router-link" :to="{name: $rns.RESIDENT_EDIT, params: {record_id: data.item.id}}" class="btn btn-sm btn-default btn-text-warning btn-hover-warning btn-icon mr-2"
+                <a is="router-link" :to="{name: $rns.RESIDENT_EDIT, params: {record_id: data.item.id}}"
+                   class="btn btn-sm btn-default btn-text-warning btn-hover-warning btn-icon mr-2"
+                   :class="{disabled: $cannot('change', 'resident')}"
                    title="Edit Resident">
                   <i class="far fa-edit"></i>
                 </a>
-                <button type="button" class="btn btn-sm btn-default btn-text-danger btn-hover-danger btn-icon mr-2"
+                <a href="javascript:" class="btn btn-sm btn-default btn-text-danger btn-hover-danger btn-icon mr-2"
+                   :class="{disabled: $cannot('delete', 'resident')}"
                    title="Delete Resident" @click="showConfirmDeleteModal(data.item)">
                   <i class="far fa-trash-alt"></i>
-                </button>
+                </a>
               </template>
             </b-table>
           </div>

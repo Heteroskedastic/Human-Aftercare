@@ -48,7 +48,8 @@
                     </a>
                     <a is="router-link"
                        :to="{name: $rns.RESIDENT_EDIT, params: {record_id: $route.params.record_id, backRef: $route.name}}"
-                       class="btn btn-sm btn-light-warning font-weight-bolder text-uppercase mr-3">
+                       class="btn btn-sm btn-light-warning font-weight-bolder text-uppercase mr-3"
+                       :class="{disabled: $cannot('change', 'resident')}">
                       <i class="fas fa-edit"></i>Edit
                     </a>
                   </div>
