@@ -1,14 +1,4 @@
 <style>
-  .resident-list-table td {
-    vertical-align: middle !important;
-  }
-  .resident-list-table th {
-    color: #B5B5C3;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    font-weight: 600;
-    letter-spacing: 0.1rem;
-  }
   .resident-list-table th.id-col {
     width: 50px;
   }
@@ -16,7 +6,6 @@
     width: 40px;
   }
   .resident-list-table td.actions-col {
-    vertical-align: middle;
     padding: 0 !important;
   }
 
@@ -43,7 +32,7 @@
           <div class="card-body">
             <b-table :items="residents" :fields="bTableFields" :sort-by.sync="bTableSortBy" no-local-sorting responsive
                      show-empty
-                     class="resident-list-table" :sort-desc.sync="bTableSortDesc">
+                     class="resident-list-table custom-table" :sort-desc.sync="bTableSortDesc">
               <template #empty="scope">
                 <h6 class="text-muted text-center pt-10">{{ scope.emptyText }}</h6>
               </template>
@@ -97,7 +86,8 @@
                 @per-page-change="p => {bTableCurrentPage=1; bTablePerPage=p}"
                 :init-per-page="bTablePerPage"
                 :per-page-options="bTablePageSizeOptions"
-                :table-pagination="bTablePagination"></b-table-pagination>
+                :table-pagination="bTablePagination">
+            </b-table-pagination>
           </div>
         </div>
       </div>

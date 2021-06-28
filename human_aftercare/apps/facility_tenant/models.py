@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 
 from django.contrib.auth import get_user_model
 from django.db import models, connections
@@ -141,6 +142,22 @@ class Resident(models.Model):
 
     def __str__(self):
         return '{} {}'.format(self.first_name, self.last_name)
+
+
+class TherapyNote(models.Model):
+    resident = models.ForeignKey(Resident, on_delete=models.PROTECT, related_name='therapy_note')
+    note = models.TextField()
+    datetime = models.DateTimeField()
+    duration_minutes = models.PositiveIntegerField()
+    create_datetime = models.DateTimeField(auto_now_add=True)
+    update_datetime = models.DateTimeField(auto_now=True)
+    create_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name='therapy_note_created', editable=False)
+    update_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name='therapy_note_updated', editable=False)
+
+    @property
+    def end_time(self):
+        end_time = self.datetime + timedelta(minutes=self.duration_minutes)
+        return end_time
 
 
 @receiver(post_save, sender=User)

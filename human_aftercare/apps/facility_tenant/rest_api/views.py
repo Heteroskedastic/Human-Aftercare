@@ -8,11 +8,11 @@ from rest_framework.parsers import FileUploadParser
 from rest_framework.response import Response
 
 from human_aftercare.helpers.utils import ExplicitPermissions
-from .filters import ResidentFilter, UserFilter, GroupFilter, PermissionFilter
+from .filters import ResidentFilter, UserFilter, GroupFilter, PermissionFilter, TherapyNoteFilter
 from .serializers import SessionSerializer, UserSessionSerializer, UserProfileSerializer, \
     SetPasswordSerializer, ResidentSerializer, FacilitySerializer, UserSerializer, GroupSerializer, \
-    PermissionSerializer, ChangePasswordSerializer
-from ..models import Resident, User
+    PermissionSerializer, ChangePasswordSerializer, TherapyNoteSerializer
+from ..models import Resident, User, TherapyNote
 
 
 class SessionView(viewsets.ViewSet):
@@ -82,6 +82,34 @@ class ProfileView(viewsets.ViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     create = put
+
+
+class GlobalConfView(viewsets.ViewSet):
+    PUBLIC_KEYS = ['TIME_ZONE',]
+    LOGIN_REQUIRED_KEYS = []
+    permission_classes = (permissions.AllowAny,)
+
+    @property
+    def conf_keys(self):
+        keys = self.PUBLIC_KEYS
+        if self.request.user.is_authenticated:
+            keys += self.LOGIN_REQUIRED_KEYS
+        return keys
+
+    def get(self, request, *args, **kwargs):
+        configs = {c: getattr(settings, c, None) for c in self.conf_keys}
+        return Response(configs)
+
+    def retrieve(self, request, *args, **kwargs):
+        conf_key = kwargs.get('pk')
+        if conf_key not in self.conf_keys:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        return Response(getattr(settings, conf_key, None))
+
+    def create(self, request, *args, **kwargs):
+        # this method is a trick to show this view in api-root
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
 class FacilityView(viewsets.ViewSet):
@@ -168,29 +196,16 @@ class ResidentView(viewsets.ModelViewSet):
     search_fields = ['first_name', 'middle_name', 'last_name']
 
 
-class GlobalConfView(viewsets.ViewSet):
-    PUBLIC_KEYS = ['TIME_ZONE',]
-    LOGIN_REQUIRED_KEYS = []
-    permission_classes = (permissions.AllowAny,)
+class TherapyNoteView(viewsets.ModelViewSet):
+    queryset = TherapyNote.objects.all()
+    serializer_class = TherapyNoteSerializer
+    filterset_class = TherapyNoteFilter
+    ordering = '-id'
+    ordering_fields = '__all__'
+    search_fields = ['resident__first_name', 'resident__last_name', 'note']
 
-    @property
-    def conf_keys(self):
-        keys = self.PUBLIC_KEYS
-        if self.request.user.is_authenticated:
-            keys += self.LOGIN_REQUIRED_KEYS
-        return keys
+    def perform_create(self, serializer):
+        serializer.save(create_by=self.request.user, update_by=self.request.user)
 
-    def get(self, request, *args, **kwargs):
-        configs = {c: getattr(settings, c, None) for c in self.conf_keys}
-        return Response(configs)
-
-    def retrieve(self, request, *args, **kwargs):
-        conf_key = kwargs.get('pk')
-        if conf_key not in self.conf_keys:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-        return Response(getattr(settings, conf_key, None))
-
-    def create(self, request, *args, **kwargs):
-        # this method is a trick to show this view in api-root
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    def perform_update(self, serializer):
+        serializer.save(update_by=self.request.user)

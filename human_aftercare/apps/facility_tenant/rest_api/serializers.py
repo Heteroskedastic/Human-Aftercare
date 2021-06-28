@@ -9,7 +9,7 @@ from django.core import exceptions as django_exceptions
 from rest_framework.exceptions import PermissionDenied
 
 from apps.facilities.models import User, Facility
-from ..models import Resident, UserProfile
+from ..models import Resident, UserProfile, TherapyNote
 from human_aftercare.helpers.utils import DynamicFieldsSerializerMixin, Base64ImageField, ex_reverse
 from ...facilities.rest_api.serializers import FacilitySerializer
 
@@ -66,6 +66,12 @@ class NestedUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name', 'last_name')
+
+
+class NestedUser2Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username',)
 
 
 class NestedProfileSerializer(serializers.ModelSerializer):
@@ -175,4 +181,21 @@ class ResidentSerializer(DynamicFieldsSerializerMixin, serializers.ModelSerializ
 
     class Meta:
         model = Resident
+        fields = '__all__'
+
+
+class NestedResidentSerializer(DynamicFieldsSerializerMixin, serializers.ModelSerializer):
+
+    class Meta:
+        model = Resident
+        fields = ('id', 'first_name', 'last_name')
+
+
+class TherapyNoteSerializer(DynamicFieldsSerializerMixin, serializers.ModelSerializer):
+    _create_by = NestedUser2Serializer(read_only=True, source='create_by')
+    _update_by = NestedUser2Serializer(read_only=True, source='update_by')
+    _resident = NestedResidentSerializer(read_only=True, source='resident')
+
+    class Meta:
+        model = TherapyNote
         fields = '__all__'

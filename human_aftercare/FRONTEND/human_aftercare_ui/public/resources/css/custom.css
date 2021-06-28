@@ -30,3 +30,31 @@ img.fit-cover {
   padding-left: calc(0.75rem + 0.65em) !important;
   padding-right: 0 !important;
 }
+
+.collapsed > .when-opened,
+:not(.collapsed) > .when-closed {
+  display: none !important;
+}
+
+.custom-table .b-table td {
+  vertical-align: middle !important;
+}
+.custom-table .b-table th {
+  color: #B5B5C3;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.1rem;
+}
+
+.resident-records-panel .card-body {
+  padding-top: 1rem;
+  padding-bottom: 2rem;
+}
+.resident-records-panel .custom-table {
+  max-height: 250px;
+}
+
+.modal-form .modal-form-content {
+  padding: 1rem;
+}

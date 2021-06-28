@@ -140,7 +140,7 @@
             <!--begin::Items-->
           </div>
         </div>
-
+        <resident-therapy-notes-panel :resident="resident"></resident-therapy-notes-panel>
       </div>
     </div>
 
@@ -151,9 +151,10 @@
 import PageBar from "@/components/PageBar";
 import LoadingOverlayableMixin from "@/components/mixins/LoadingOverlayableMixin";
 import UtilMixin from "@/components/mixins/UtilMixin";
+import ResidentTherapyNotesPanel from "@/views/resident/partials/ResidentTherapyNotesPanel";
 
 export default {
-  components: {PageBar},
+  components: {ResidentTherapyNotesPanel, PageBar},
   mixins: [LoadingOverlayableMixin, UtilMixin],
   data: function () {
     return {
@@ -161,10 +162,10 @@ export default {
     };
   },
   created: function () {
-    this.loadRecord();
+    this.loadResident();
   },
   methods: {
-    loadRecord: function () {
+    loadResident: function () {
       var residentId = this.$route.params.record_id;
       this.loadingOverlay = true;
       this.$http.get(`resident/${residentId}/`).then(

@@ -7,7 +7,7 @@ from django.db.models import Q
 from django_filters import rest_framework as filters
 from django_filters.rest_framework import BooleanFilter
 
-from ..models import Resident, User
+from ..models import Resident, User, TherapyNote
 
 
 class UserFilter(filters.FilterSet):
@@ -56,3 +56,11 @@ class ResidentFilter(filters.FilterSet):
     class Meta:
         model = Resident
         exclude = ['photo', 'photo_thumb']
+
+
+class TherapyNoteFilter(filters.FilterSet):
+    note = django_filters.CharFilter(lookup_expr='icontains')
+
+    class Meta:
+        model = TherapyNote
+        fields = '__all__'

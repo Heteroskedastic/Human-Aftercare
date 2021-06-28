@@ -98,14 +98,15 @@
                         <i class="la la-calendar"></i>
                       </span>
                     </div>
-                    <vue-datetimepicker v-model="record.birth_date"
-                                        :dateonly="true"
-                                        placeholder=""
-                                        name="birth_date"
-                                        :wrap="true"
-                                        iconRef=".birthdate-picker"
-                                        class="form-control form-control-lg form-control-solid"
-                                        :config="{format: 'YYYY-MM-DD', mask: true, timepicker: false, scrollInput: false}"></vue-datetimepicker>
+                    <vue-datetimepicker
+                        v-model="record.birth_date"
+                        :dateonly="true"
+                        placeholder=""
+                        name="birth_date"
+                        :wrap="true"
+                        iconRef=".birthdate-picker"
+                        class="form-control form-control-lg form-control-solid"
+                        :config="{format: 'YYYY-MM-DD', mask: true, timepicker: false, scrollInput: false}"></vue-datetimepicker>
                   </div>
                 </div>
               </div>
@@ -194,7 +195,7 @@
                       confirming-icon-class="fa fa-spin fa-spinner"
                       class="inline"
                       :confirming="deleting"
-                      :disabled="$cannot('delete', 'academicgoal')"
+                      :disabled="$cannot('delete', 'resident')"
                     >
                       <i class="far fa-trash-alt"></i> Delete
                     </span>
