@@ -15,13 +15,14 @@ import { version as AppVersion } from "../package.json";
 import {permAbility, definePermAbilitiesFor} from "./ability";
 import abilityPluginPerm from "./abilityPluginPerm";
 
-require("../public/metronic/assets/plugins/global/plugins.bundle.css");
-require("../public/metronic/assets/css/style.bundle.css");
-require("../public/metronic/assets/css/themes/layout/header/base/light.css");
-require("../public/metronic/assets/css/themes/layout/header/menu/light.css");
-require("../public/metronic/assets/css/themes/layout/brand/dark.css");
-require("../public/metronic/assets/css/themes/layout/aside/dark.css");
-require("../public/resources/css/custom.css");
+import "bootstrap-vue/dist/bootstrap-vue.css"
+import "../public/metronic/assets/plugins/global/plugins.bundle.css";
+import "../public/metronic/assets/css/style.bundle.css";
+import "../public/metronic/assets/css/themes/layout/header/base/light.css";
+import "../public/metronic/assets/css/themes/layout/header/menu/light.css";
+import "../public/metronic/assets/css/themes/layout/brand/dark.css";
+import "../public/metronic/assets/css/themes/layout/aside/dark.css";
+import "../public/resources/css/custom.css";
 
 Vue.use(abilityPluginPerm, permAbility);
 

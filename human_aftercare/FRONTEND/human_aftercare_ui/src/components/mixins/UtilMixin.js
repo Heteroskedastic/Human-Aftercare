@@ -207,9 +207,11 @@ export default {
       value = value.toString();
       return value.charAt(0).toUpperCase() + value.slice(1);
     },
-    ageFormat: function(birth_date, showLabel) {
+    ageFormat: function(birth_date, showLabel, decimalCount) {
       showLabel = showLabel === undefined ? true : showLabel;
-      return `${moment().diff(birth_date, "years")}${
+      var age = moment().diff(birth_date, "years", !!decimalCount);
+      age = decimalCount? this.removeTrailingZero(age, decimalCount): Math.floor(age);
+      return `${age}${
         showLabel ? " years" : ""
       }`;
     },

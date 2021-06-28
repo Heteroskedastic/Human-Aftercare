@@ -171,6 +171,7 @@ class GroupSerializer(DynamicFieldsSerializerMixin, serializers.ModelSerializer)
 
 
 class ResidentSerializer(DynamicFieldsSerializerMixin, serializers.ModelSerializer):
+    photo = Base64ImageField(required=False, allow_null=True)
 
     class Meta:
         model = Resident

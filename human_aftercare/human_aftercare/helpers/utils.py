@@ -593,46 +593,6 @@ class IsOwnerOrReadOnlyPermission(IsOwnerPermission):
         return super().has_object_permission(request, view, obj)
 
 
-def resize_photo(origin_field, resized_field, scale=100):
-    new_name, new_extension = os.path.splitext(origin_field.name)
-    new_extension = new_extension.lower()
-
-    new_filename = new_name + '_size{}'.format(scale) + new_extension
-
-    if new_extension in ['.jpg', '.jpeg']:
-        FTYPE = 'JPEG'
-    elif new_extension == '.gif':
-        FTYPE = 'GIF'
-    elif new_extension == '.png':
-        FTYPE = 'PNG'
-    else:
-        raise Exception('Not supported format "{}"'.format(new_extension))
-
-    image = Image.open(origin_field).copy()
-    new_size = (scale, scale)
-    x, y = image.size
-
-    if x > scale and y > scale:
-        if x > y:
-            ratio = max(y / scale, 1)
-            new_size = (int(max(x / ratio, 1)), scale)
-        elif x < y:
-            ratio = max(x / scale, 1)
-            new_size = (scale, int(max(y / ratio, 1)))
-        image.thumbnail(new_size, Image.ANTIALIAS)
-
-    # Save resizednail to in-memory file as StringIO
-    temp_resized = BytesIO()
-    image.save(temp_resized, FTYPE)
-    temp_resized.seek(0)
-
-    # set save=False, otherwise it will run in an infinite loop
-    resized_field.save(new_filename, ContentFile(temp_resized.read()), save=False)
-    temp_resized.close()
-
-    return True
-
-
 class CreateListMixin:
     """Allows bulk creation of a resource."""
     def get_serializer(self, *args, **kwargs):
@@ -691,3 +651,46 @@ def minutes_to_time(m):
 def weekday_name(day):
     assert 0 <= day <= 6, 'day should be between 0-6'
     return ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][day]
+
+
+def resize_photo(origin_field, resized_field, scale=100, overwrite=True, save=True):
+    new_filename = origin_field.name
+    new_name, new_extension = os.path.splitext(new_filename)
+    new_extension = new_extension.lower()
+    new_filename = new_name + '_size{}'.format(scale) + new_extension
+    if overwrite and resized_field.name:
+        new_filename = resized_field.name
+
+    if new_extension in ['.jpg', '.jpeg']:
+        FTYPE = 'JPEG'
+    elif new_extension == '.gif':
+        FTYPE = 'GIF'
+    elif new_extension == '.png':
+        FTYPE = 'PNG'
+    else:
+        raise Exception('Not supported format "{}"'.format(new_extension))
+
+    image = Image.open(origin_field).copy()
+    x, y = image.size
+
+    if scale and (x > scale and y > scale):
+        new_size = (scale, scale)
+        if x > y:
+            ratio = max(y / scale, 1)
+            new_size = (int(max(x / ratio, 1)), scale)
+        elif x < y:
+            ratio = max(x / scale, 1)
+            new_size = (scale, int(max(y / ratio, 1)))
+        image.thumbnail(new_size, Image.ANTIALIAS)
+
+    if save:
+        # Save resizednail to in-memory file as StringIO
+        temp_resized = BytesIO()
+        image.save(temp_resized, FTYPE)
+        temp_resized.seek(0)
+
+        # set save=False, otherwise it will run in an infinite loop
+        resized_field.save(new_filename, ContentFile(temp_resized.read()), save=False)
+        temp_resized.close()
+
+    return image, new_filename, FTYPE

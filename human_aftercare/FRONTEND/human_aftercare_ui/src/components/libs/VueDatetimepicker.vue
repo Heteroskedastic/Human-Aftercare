@@ -29,7 +29,7 @@
   $.datetimepicker.setDateFormatter("moment");
 
   export default {
-    name: "dateTime",
+    name: "VueDatetimepicker",
     props: {
       showInput: {
         default: true

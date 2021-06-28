@@ -1,7 +1,4 @@
 <style scoped>
-  img.user-avatar {
-    object-fit: cover;
-  }
 </style>
 <template>
   <div id="kt_header" class="header header-fixed">
@@ -135,7 +132,7 @@
             <span class="text-dark-50 font-weight-bolder font-size-base d-none d-md-inline mr-3">{{$store.getters.userDisplayName}}</span>
             <span class="symbol symbol-lg-35 symbol-25 symbol-light-success">
               <span v-if="!$store.state.currentUser.profile.avatar" class="symbol-label font-size-h5 font-weight-bold">{{$store.getters.userDisplayName[0]}}</span>
-              <img v-else :src="$store.state.currentUser.profile.avatar" class="user-avatar">
+              <img v-else :src="$store.state.currentUser.profile.avatar" class="fit-cover">
             </span>
           </div>
         </div>

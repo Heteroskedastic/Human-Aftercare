@@ -6,7 +6,7 @@
     <div class="container-fluid d-flex flex-column flex-md-row align-items-center justify-content-between">
       <div class="text-dark order-2 order-md-1">
         <span class="text-muted font-weight-bold mr-2">2021©</span>
-        <a href="javascript:" target="_blank" class="text-dark-75 text-hover-primary mr-2">Human-Aftercare</a>
+        <a href="javascript:" target="_blank" class="text-dark-50 text-hover-primary mr-2">Human-Aftercare</a>
         <span class="badge badge-pill badge-success" title="UI Version">Version: {{$appVersion}}</span>
       </div>
       <div class="nav nav-dark">

@@ -125,7 +125,7 @@
                   <div class="form-group row">
                     <label class="col-xl-3 col-lg-3 col-form-label">Primary Contact Name</label>
                     <div class="col-lg-9 col-xl-6">
-                      <input v-model="facility.primary_contact_name" class="form-control form-control-lg form-control-solid" type="text" value="Bold"/>
+                      <input v-model="facility.primary_contact_name" class="form-control form-control-lg form-control-solid" type="text"/>
                     </div>
                   </div>
                   <div class="form-group row">

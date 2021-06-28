@@ -55,4 +55,4 @@ class ResidentFilter(filters.FilterSet):
 
     class Meta:
         model = Resident
-        fields = '__all__'
+        exclude = ['photo', 'photo_thumb']

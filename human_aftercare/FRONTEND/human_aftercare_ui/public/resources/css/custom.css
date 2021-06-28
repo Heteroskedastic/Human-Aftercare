@@ -14,3 +14,19 @@ img.facility-logo {
   object-fit: cover;
   border-radius: .42rem;
 }
+
+.blockUI.blockMsg .spinner:before {
+  width: 2rem;
+  height: 2rem;
+}
+
+img.fit-cover {
+  object-fit: cover;
+}
+
+.table.b-table > thead > tr > [aria-sort]:not(.b-table-sort-icon-left),
+.table.b-table > tfoot > tr > [aria-sort]:not(.b-table-sort-icon-left) {
+  background-position: left calc(0.75rem / 2) center !important;
+  padding-left: calc(0.75rem + 0.65em) !important;
+  padding-right: 0 !important;
+}

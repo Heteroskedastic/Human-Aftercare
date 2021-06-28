@@ -10,9 +10,12 @@ import Dashboard from "@/views/Dashboard";
 import FacilityList from "@/views/FacilityList";
 import FacilityLayout from "@/components/layouts/FacilityLayout";
 import SiteLayout from "@/components/layouts/SiteLayout";
-import ResidentList from "@/views/ResidentList";
+import ResidentList from "@/views/resident/ResidentList";
 import UserProfile from "@/views/UserProfile";
 import FacilitySetting from "@/views/FacilitySetting";
+import ResidentAdd from "@/views/resident/ResidentAdd";
+import ResidentEdit from "@/views/resident/ResidentEdit";
+import ResidentDetail from "@/views/resident/ResidentDetail";
 
 Vue.use(VueRouter);
 
@@ -25,6 +28,9 @@ export const routeNames = {
   FACILITY_SETTING: "facility_setting",
   DASHBOARD: "dashboard",
   RESIDENT_LIST: "resident_list",
+  RESIDENT_ADD: "resident_add",
+  RESIDENT_EDIT: "resident_edit",
+  RESIDENT_DETAIL: "resident_detail",
 };
 
 Vue.prototype.$rns = routeNames;
@@ -131,7 +137,7 @@ const router = new VueRouter({
           component: Dashboard
         },
         {
-          path: "resident-list",
+          path: "resident/list",
           name: routeNames.RESIDENT_LIST,
           meta: {
             pageInfo: {
@@ -139,6 +145,39 @@ const router = new VueRouter({
             }
           },
           component: ResidentList
+        },
+        {
+          path: "resident/add",
+          name: routeNames.RESIDENT_ADD,
+          meta: {
+            pageInfo: {
+              title: "Add New Resident",
+              back: routeNames.RESIDENT_LIST
+            }
+          },
+          component: ResidentAdd
+        },
+        {
+          path: "resident/:record_id/edit",
+          name: routeNames.RESIDENT_EDIT,
+          meta: {
+            pageInfo: {
+              title: "Edit Resident",
+              back: routeNames.RESIDENT_LIST
+            }
+          },
+          component: ResidentEdit
+        },
+        {
+          path: "resident/:record_id/detail",
+          name: routeNames.RESIDENT_DETAIL,
+          meta: {
+            pageInfo: {
+              title: "Resident Detail",
+              back: routeNames.RESIDENT_LIST
+            }
+          },
+          component: ResidentDetail
         },
         {
           path: "*",

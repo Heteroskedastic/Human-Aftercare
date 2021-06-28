@@ -11,7 +11,11 @@
       <div class="d-flex align-items-center flex-wrap mr-2">
         <slot name="pre-title"></slot>
         <slot name="title">
-          <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">{{ $route.meta.pageInfo.title }}</h5>
+          <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">
+            <slot name="title-text">
+              {{ $route.meta.pageInfo.title }}
+            </slot>
+          </h5>
         </slot>
         <slot name="post-title"></slot>
         <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
