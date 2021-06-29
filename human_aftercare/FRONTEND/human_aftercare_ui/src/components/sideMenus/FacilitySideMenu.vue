@@ -55,7 +55,9 @@
           <li class="menu-section">
             <h4 class="menu-text">Sections</h4>
           </li>
-          <li class="menu-item menu-item-submenu" :class="{'menu-item-open': isActive($rns.RESIDENT_LIST)}" aria-haspopup="true" data-menu-toggle="hover">
+          <li class="menu-item menu-item-submenu"
+              :class="{'menu-item-open': isActive($rns.RESIDENT_LIST, $rns.RESIDENT_ADD, $rns.RESIDENT_EDIT, $rns.RESIDENT_DETAIL)}"
+              aria-haspopup="true" data-menu-toggle="hover">
             <a href="javascript:" class="menu-link menu-toggle">
               <span class="flaticon-users-1 menu-icon"></span>
               <span class="menu-text">Resident Mgmt.</span>
@@ -69,7 +71,9 @@
                     <span class="menu-text">Resident Mgmt.</span>
                   </span>
                 </li>
-                <li class="menu-item" :class="{'menu-item-active': isActive($rns.RESIDENT_LIST)}" aria-haspopup="true">
+                <li class="menu-item"
+                    :class="{'menu-item-active': isActive($rns.RESIDENT_LIST, $rns.RESIDENT_ADD, $rns.RESIDENT_EDIT, $rns.RESIDENT_DETAIL)}"
+                    aria-haspopup="true">
                   <a is="router-link" :to="{name: $rns.RESIDENT_LIST}" class="menu-link">
                     <i class="menu-bullet flaticon-users"></i>
                     <span class="menu-text">Resident List</span>
