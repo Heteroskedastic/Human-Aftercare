@@ -1,8 +1,36 @@
 from django.conf import settings
+from django.contrib.auth.models import Permission, Group
 from rest_framework import serializers
 
 from apps.facilities.models import Facility, User
 from human_aftercare.helpers.utils import DynamicFieldsSerializerMixin, ex_reverse
+
+
+
+class PermissionSerializer(DynamicFieldsSerializerMixin, serializers.ModelSerializer):
+    app_label = serializers.CharField(read_only=True, source="content_type.app_label")
+
+    class Meta:
+        model = Permission
+        fields = ('id', 'name', 'codename', "app_label")
+
+
+class NestedGroupSerializer(serializers.ModelSerializer):
+    permissions = PermissionSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Group
+        fields = ('id', 'name', 'permissions')
+
+
+class UserSessionSerializer(DynamicFieldsSerializerMixin, serializers.ModelSerializer):
+    user_permissions = PermissionSerializer(read_only=True, many=True)
+    groups = NestedGroupSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = User
+        exclude = ('password',)
+
 
 
 class FacilitySerializer(DynamicFieldsSerializerMixin, serializers.ModelSerializer):

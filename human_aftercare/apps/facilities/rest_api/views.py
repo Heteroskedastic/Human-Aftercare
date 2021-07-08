@@ -6,7 +6,7 @@ from rest_framework.response import Response
 
 from ..models import Facility, FacilityDomain
 from .filters import FacilityFilter
-from .serializers import FacilitySerializer
+from .serializers import FacilitySerializer, UserSessionSerializer
 from apps.facility_tenant.rest_api.views import (
     SessionView as BaseSessionView,
     GlobalConfView as BaseGlobalConfView
@@ -14,7 +14,7 @@ from apps.facility_tenant.rest_api.views import (
 
 
 class SessionView(BaseSessionView):
-    pass
+    getterSerializer = UserSessionSerializer
 
 
 class GlobalConfView(BaseGlobalConfView):

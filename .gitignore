@@ -95,6 +95,7 @@ ipython_config.py
 #Pipfile.lock
 
 # django
+collected_static
 www/
 */*/settings/external_config*.py
 */*/settings/local.py
