@@ -143,9 +143,12 @@
                         <i class="la la-phone"></i>
                       </span>
                     </div>
-                    <input v-model="record.phone_number" type="text" class="form-control form-control-lg form-control-solid"/>
+                    <input is="masked-input" v-model="record.phone_number" type="text" name="phone_number"
+                           v-validate="'phone'" :mask="internationalPhoneMask" :guide="true"
+                           class="form-control form-control-lg form-control-solid"/>
                   </div>
                 </div>
+                <div class="offset-lg-3 offset-xl-3 col-lg-9 col-xl-6 form-text text-danger" v-show="errors.has('phone_number')">{{ errors.first('phone_number') }}</div>
               </div>
               <div class="form-group row">
                 <label class="col-xl-3 col-lg-3 col-form-label">Eye Color</label>
@@ -168,7 +171,7 @@
               <div class="card-footer">
                 <div class="row">
                   <div class="col text-left">
-                    <button type="submit" class="btn btn-primary mr-2" :disabled="saving">
+                    <button type="submit" class="btn btn-primary mr-2" :disabled="errors.any() || saving">
                       <template v-if="$route.params.record_id">
                         <i :class="saving? 'fa fa-spin fa-spinner': 'fa fa-save'"></i>
                         <span v-show="!saving">Save</span>

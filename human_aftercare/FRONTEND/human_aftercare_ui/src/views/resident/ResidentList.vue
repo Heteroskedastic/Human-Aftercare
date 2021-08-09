@@ -59,7 +59,7 @@
               </template>
               <template #cell(phone_number)="data">
                 <a :class="data.item.phone_number? 'text-dark-65': 'text-muted'" target="_blank"
-                   :href="data.item.phone_number? `tel:${data.item.phone_number}`: null">{{ data.item.phone_number || '[NO PHONE]' }}
+                   :href="data.item.phone_number? `tel:${data.item.phone_number}`: null">{{ formatPhone(data.item.phone_number, {_default: '[NO PHONE]'}) }}
                 </a>
               </template>
               <template #cell(birth_date)="data">

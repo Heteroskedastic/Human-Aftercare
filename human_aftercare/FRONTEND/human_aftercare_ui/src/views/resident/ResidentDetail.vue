@@ -63,7 +63,7 @@
                         <i class="flaticon2-new-email mr-2 font-size-lg"></i>{{resident.email || '[No E-mail]'}}
                       </a>
                       <a href="#" class="text-dark-50 text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
-                        <i class="flaticon2-phone mr-2 font-size-lg"></i>{{resident.phone_number || '[No Phone]'}}
+                        <i class="flaticon2-phone mr-2 font-size-lg"></i>{{formatPhone(resident.phone_number, {_default: '[NO PHONE]'})}}
                       </a>
                       <a href="#" class="text-dark-50 text-hover-primary font-weight-bold">
                         <i class="mr-2 font-size-lg" :class="resident.gender=='f'? 'fa fa-female': 'fa fa-male'">

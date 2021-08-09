@@ -118,9 +118,12 @@
                             <i class="la la-phone"></i>
                           </span>
                         </div>
-                        <input v-model="facility.phone_number" type="text" class="form-control form-control-lg form-control-solid"/>
+                        <input is="masked-input" v-model="facility.phone_number" type="text" name="phone_number"
+                               v-validate="'phone'" :mask="internationalPhoneMask" :guide="true"
+                               class="form-control form-control-lg form-control-solid"/>
                       </div>
                     </div>
+                    <div class="offset-lg-3 offset-xl-3 col-lg-9 col-xl-6 form-text text-danger" v-show="errors.has('phone_number')">{{ errors.first('phone_number') }}</div>
                   </div>
                   <div class="form-group row">
                     <label class="col-xl-3 col-lg-3 col-form-label">Primary Contact Name</label>
@@ -150,13 +153,16 @@
                             <i class="la la-phone"></i>
                           </span>
                         </div>
-                        <input v-model="facility.primary_contact_phone" type="text" class="form-control form-control-lg form-control-solid"/>
+                        <input is="masked-input" v-model="facility.primary_contact_phone" type="text" name="primary_contact_phone"
+                               v-validate="'phone'" :mask="internationalPhoneMask" :guide="true"
+                               class="form-control form-control-lg form-control-solid"/>
                       </div>
                     </div>
+                    <div class="offset-lg-3 offset-xl-3 col-lg-9 col-xl-6 form-text text-danger" v-show="errors.has('primary_contact_phone')">{{ errors.first('primary_contact_phone') }}</div>
                   </div>
                   <div class="card-footer">
                     <template v-if="$can('change', 'facility')">
-                      <button type="submit" class="btn btn-primary mr-2" :disabled="savingBasicInfo">
+                      <button type="submit" class="btn btn-primary mr-2" :disabled="errors.any() || savingBasicInfo">
                         <i v-if="savingBasicInfo" class="fa fa-spin fa-spinner"></i>
                         Save Changes
                       </button>

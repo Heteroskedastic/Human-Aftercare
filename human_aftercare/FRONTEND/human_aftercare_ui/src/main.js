@@ -1,5 +1,6 @@
 import Vue from "vue";
 import BootstrapVue from "bootstrap-vue";
+import MaskedInput from "vue-text-mask";
 import Toasted from 'vue-toasted';
 
 import router from "./router";
@@ -27,6 +28,7 @@ import "../public/resources/css/custom.css";
 Vue.use(abilityPluginPerm, permAbility);
 
 Vue.use(BootstrapVue);
+Vue.component("masked-input", MaskedInput);
 Vue.use(Toasted, {
   iconPack: "custom-class",
   theme: "bubble",
